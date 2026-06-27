@@ -2,6 +2,11 @@
 
 Quick reference for all IP addresses, FQDNs, and VMkernel roles in this environment.
 
+<img width="677" height="264" alt="image" src="https://github.com/user-attachments/assets/091e8807-82fa-43c8-9736-6ae8c71bd3aa" />
+<img width="677" height="163" alt="image" src="https://github.com/user-attachments/assets/e6730b76-74cc-4783-a3fd-2d3743311513" />
+<img width="679" height="85" alt="image" src="https://github.com/user-attachments/assets/495e1227-9e23-4adf-95d8-acbd3273807d" />
+
+
 ## IP Summary Table
 
 | IP Address | FQDN | Role | Site |

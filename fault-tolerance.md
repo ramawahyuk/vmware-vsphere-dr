@@ -14,7 +14,7 @@ The full DR lifecycle is managed through SRM and consists of six sequential oper
 ### Phase 1: Test Recovery Plan (Non-Destructive)
 
 <img width="1839" height="545" alt="image" src="https://github.com/user-attachments/assets/fdecc5b5-7488-4a22-88a2-bde6805800c4" />
-
+<img width="1837" height="480" alt="image" src="https://github.com/user-attachments/assets/35bc11b8-c4e2-40b9-815f-7acfdd4f5535" />
 Validates the DR plan without disrupting production. Creates a writable snapshot of replicated storage and powers on VMs in an isolated test network.
 
 
@@ -47,7 +47,8 @@ Steps:
     The recovery plan test process is complete.
 
 ```
-<img width="1837" height="480" alt="image" src="https://github.com/user-attachments/assets/35bc11b8-c4e2-40b9-815f-7acfdd4f5535" />
+
+<img width="975" height="548" alt="image" src="https://github.com/user-attachments/assets/586b6f78-38c5-4efe-a1b4-8471e9125dc7" />
 
 ---
 
@@ -80,6 +81,7 @@ Below is the procedure of clean up after testing the recovery plan:
 Migrates the protected VM from HK production site to SG DR site in a controlled manner. Both sites must be operational.
 
 <img width="1837" height="523" alt="image" src="https://github.com/user-attachments/assets/21d2c7b2-8a04-43ce-a574-ba9640c52029" />
+<img width="1529" height="786" alt="image" src="https://github.com/user-attachments/assets/5fa35d5c-735f-460c-9ec0-4b7ba6882ee2" />
 
 Based on the figure above after conducting test recovery plan and clean up process, the recovery plan can be tested using planned migration recovery type. The purpose of this phase is to migrate the VM from protected site or HK DC to the Recovery site or SG DC.
 
@@ -93,7 +95,7 @@ The procedure of recovery phase I:
 6.	Change recovery site storage to writable in protection Group VR for hklnx-app00.core.biz and then configure storage
 7.	Power on priority VMs hklnx-app00.core.biz and wait for VMware tools
 ```
-<img width="1529" height="786" alt="image" src="https://github.com/user-attachments/assets/5fa35d5c-735f-460c-9ec0-4b7ba6882ee2" />
+
 
 ---
 
@@ -104,6 +106,7 @@ The procedure of recovery phase I:
 After Recovery I, SG becomes the new protected site and HK becomes the recovery site. Replication direction reverses (SG → HK).
 
 <img width="1838" height="523" alt="image" src="https://github.com/user-attachments/assets/40a11fed-fe5a-4b03-bcc7-78782e68ee6e" />
+<img width="1836" height="325" alt="image" src="https://github.com/user-attachments/assets/6ceaa86d-2d34-4e4e-8f4f-3606610992cc" />
 
 After recovery phase I succeeded, the next thing to do is to re-protect the VM that has been moved to the recovery site in order to make the current recovery site becomes a protected site. By this process also make the direction of the replication is reversed.
 ```
@@ -114,7 +117,7 @@ Below is the procedure of reprotect phase I:
 4.	Configure protection to reverse direction in protection Group VR and then configure protection for VM hklnx-app00.core.biz
 5.	Clean up storage in the protection group VR and then synchronize storage in protection Group VR
 ```
-<img width="1836" height="325" alt="image" src="https://github.com/user-attachments/assets/6ceaa86d-2d34-4e4e-8f4f-3606610992cc" />
+
 
 ---
 
@@ -125,6 +128,7 @@ Below is the procedure of reprotect phase I:
 Migrates the VM back to HK. Protected site is now DRS-01 (SG), recovery site is PROD-00 (HK).
 
 <img width="1836" height="521" alt="image" src="https://github.com/user-attachments/assets/ab1a5a5f-1af6-400b-800f-8968e09a345e" />
+<img width="1531" height="785" alt="image" src="https://github.com/user-attachments/assets/ebb68e99-f02d-4493-8485-cfbf7a472bb2" />
 
 After finishing re-protect phase I, in order to bring back the replicated and the direction of replication process to the HK datacenter, recovery phase II must be conducted using planned migration recovery type. In the Plan Summary below it can be noticed that Protected Site is DRS-01 which is located in the SG datacenter, whereas the recovery site is in the HK datacenter.
 
@@ -145,7 +149,7 @@ Below is the procedure of recovery phase II:
 13.	Power on priority VM hklnx-app00.core.biz and wait for VMware Tools work
 
 ```
-<img width="1531" height="785" alt="image" src="https://github.com/user-attachments/assets/ebb68e99-f02d-4493-8485-cfbf7a472bb2" />
+
 
 ---
 
@@ -155,6 +159,7 @@ Below is the procedure of recovery phase II:
 
 Returns the system to the original state: HK is protected, SG is recovery, replication direction is HK → SG.
 <img width="1839" height="523" alt="image" src="https://github.com/user-attachments/assets/11d9cd33-f72f-4684-901a-d44e0d761be4" />
+<img width="1839" height="325" alt="image" src="https://github.com/user-attachments/assets/afe77cec-9f2c-4282-a22e-83460b8a188d" />
 After finishing the recovery phase II, the next thing to do is re-protect again the current VM configuration in order to restored the direction of replication and configuration of protection and recovery sites to pre-migration condition
 
 ```
@@ -165,7 +170,7 @@ Below is the procedure of reprotect phase II:
 4.	Check again if the protection group is available or not, if available clean up the storage for the VM and then synchronize the storage between VM and protection group.
 
 ```
-<img width="1839" height="325" alt="image" src="https://github.com/user-attachments/assets/afe77cec-9f2c-4282-a22e-83460b8a188d" />
+
 
 
 ---

@@ -19,7 +19,7 @@
 - [Hostname & FQDN Convention](#hostname--fqdn-convention)
 - [Fault Tolerance Design](#fault-tolerance-design)
 - [Replication & Failback Scenarios](#replication--failback-scenarios)
-- [Results](#results)
+- [Results](https://github.com/ramawahyuk/vmware-vsphere-dr/blob/main/results.md)
 - [Key Concepts](#key-concepts)
 
 ---

@@ -96,7 +96,7 @@ All nodes follow a structured FQDN naming scheme: `XX-ZZ-VVV-NN.domain.TLD`
 | **Cold Standby** | DR site is powered off; longest activation time |
 
 ---
-## Fault Tolerance Design
+## VM Fault Tolerance Design
 
 vSphere Fault Tolerance (FT) provides **zero-downtime protection** for individual VMs by maintaining a live secondary VM on a separate ESXi host that mirrors every CPU instruction of the primary in real time.
 

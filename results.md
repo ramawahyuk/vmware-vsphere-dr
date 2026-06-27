@@ -1,5 +1,3 @@
----
-
 ## Results
 
 ### Recovery Test Run 1
@@ -37,4 +35,3 @@
 - RPO as low as **5 minutes** is achievable with vSphere Replication
 - DNS/FQDN resolution is a hard dependency — domain controller must remain available throughout DR operations
 
----

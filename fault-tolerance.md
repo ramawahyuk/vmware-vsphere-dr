@@ -1,34 +1,3 @@
-## Fault Tolerance Design
-
-vSphere Fault Tolerance (FT) provides **zero-downtime protection** for individual VMs by maintaining a live secondary VM on a separate ESXi host that mirrors every CPU instruction of the primary in real time.
-
-```
-  ESXi Host Primary (hkesx-app00)      ESXi Host Secondary (hkesx-app01)
-  ┌───────────────────────────┐         ┌──────────────────────────────┐
-  │  Primary VM               │         │  Secondary VM                │
-  │  hklnx-app00.core.biz    │◄────────►│  (shadow — always in sync)  │
-  │  (active, serving traffic)│  FT Log │  (takes over instantly       │
-  └───────────────────────────┘  Stream │   if primary host fails)     │
-                                        └──────────────────────────────┘
-```
-
-**Requirements:**
-- Both hosts must be connected to the vSAN datastore (shared storage is mandatory for FT)
-- VMkernel adapters for **FT Logging** and **vMotion** must be configured on both hosts
-- FT provides zero RPO and zero RTO — no shutdown, no data loss, no manual intervention
-
-**Difference between FT and SRM Replication:**
-
-| Feature | Fault Tolerance (FT) | SRM + vSphere Replication |
-|---------|---------------------|--------------------------|
-| Scope | Single host failure | Site-level disaster |
-| RPO | Zero (real-time mirror) | ≥ 5 minutes |
-| RTO | Zero (automatic) | Minutes (orchestrated) |
-| Failback | Automatic | Manual (planned migration) |
-| Use case | Critical VMs on same cluster | Cross-datacenter DR |
-
----
-
 ## Replication & Failback Scenarios
 
 The full DR lifecycle is managed through SRM and consists of six sequential operations:

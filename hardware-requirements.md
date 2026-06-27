@@ -1,4 +1,4 @@
-## Hardware Requirements
+## Hardware Requirements for HK and SG datacenter
 
 ### HK Datacenter — Production Site
 
@@ -121,6 +121,8 @@ Hosts: vCenter Server VCSA, vSphere Replication appliance, SRM appliance
 
 ### HK Datacenter — Production Site
 
+<img width="2261" height="1440" alt="Untitled Diagram-HK (1)" src="https://github.com/user-attachments/assets/75c8bcab-6ebd-4caa-a05b-93a0125d8874" />
+
 | Host | Datastore | Size (GB) | Asset |
 |------|-----------|----------|-------|
 | `hkesx-prd00` (192.168.1.250) | datastore1 | 150 | ESXi OS |
@@ -128,16 +130,17 @@ Hosts: vCenter Server VCSA, vSphere Replication appliance, SRM appliance
 | | datastore3 | 150 | vSphere Replication OS |
 | | datastore4 | 100 | SRM OS |
 | | datastore5 | 200 | Replication |
-| | datastore6 | 200 | DR |
-| | datastore7 | 140 | vSAN |
+| | datastore6 | 200 | DR/vSAN |
 | `hkesx-app00` (192.168.1.50) | datastore1 | 100 | ESXi OS |
 | | datastore2 | 100 | App OS |
-| | datastore3 | 140 | vSAN |
+| | datastore3 | 140 | DR/vSAN |
 | `hkesx-app01` (192.168.1.51) | datastore1 | 100 | ESXi OS |
 | | datastore2 | 100 | App OS |
-| | datastore3 | 140 | vSAN |
+
 
 ### SG Datacenter — DR Site
+
+<img width="1443" height="1389" alt="Untitled Diagram-SG" src="https://github.com/user-attachments/assets/3c33789f-8ecc-4859-80b3-de4caf1edb73" />
 
 | Host | Datastore | Size (GB) | Asset |
 |------|-----------|----------|-------|
@@ -146,7 +149,7 @@ Hosts: vCenter Server VCSA, vSphere Replication appliance, SRM appliance
 | | datastore3 | 150 | vSphere Replication OS |
 | | datastore4 | 100 | SRM OS |
 | | datastore5 | 200 | Replication |
-| | datastore6 | 200 | DR |
+| | datastore6 | 200 | DR/vSAN |
 | `sgesxdr-app01` (192.168.1.60) | datastore1 | 150 | ESXi OS |
 | | datastore2 | 100 | Linux OS |
 

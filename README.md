@@ -1,7 +1,7 @@
 # 🏛️ VMware vSphere Clustered System with Disaster Recovery
 
 > **Clustered system with disaster recovery capabilities to minimize downtime using virtual machines**  
-> This is the documentation of my Academic research project which I designing, implementing, and validating a dual-datacenter VMware cluster with vSphere Replication, Site Recovery Manager (SRM), Fault Tolerance, and automated failback across two geographically separated sites.
+> This is the documentation of my Academic research project which I design, implement, and validate a dual-datacenter VMware cluster with vSphere Replication, Site Recovery Manager (SRM), Fault Tolerance, and automated failback across two geographically separated sites.
 
 [![VMware ESXi](https://img.shields.io/badge/VMware_ESXi-8.0-blue?logo=vmware)](https://www.vmware.com/products/esxi-and-esx.html)
 [![vCenter](https://img.shields.io/badge/vCenter_Server-8.0-blue?logo=vmware)](https://www.vmware.com/)
@@ -21,6 +21,7 @@
 - [Replication & Failback Scenarios](#replication--failback-scenarios)
 - [Results](#results)
 - [Key Concepts](#key-concepts)
+- [Key Concepts](#network-map.md)
 
 ---
 

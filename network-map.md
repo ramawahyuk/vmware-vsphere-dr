@@ -3,25 +3,37 @@
 Quick reference for all IP addresses, FQDNs, and VMkernel roles in this environment.
 <img width="2610" height="1917" alt="Untitled Diagram-Network" src="https://github.com/user-attachments/assets/323e01e6-24d5-46a1-82c2-c6f941cef128" />
 
-## IP Summary Table
+### HK Datacenter — Production Site (`192.168.1.x`)
 
-| IP Address | FQDN | Role | Site |
-|-----------|------|------|------|
-| 192.168.1.100 | hkwinprd00.core.biz | Domain Controller (DNS + AD) | Shared |
-| 192.168.1.250 | hkesx-prd00.core.biz | ESXi System Server | HK (Prod) |
-| 192.168.1.251 | hkvct-prd00.core.biz | vCenter Server Appliance | HK (Prod) |
-| 192.168.1.120 | hkvrp-app00.core.biz | vSphere Replication Appliance | HK (Prod) |
-| 192.168.1.121 | hksrm-app00.core.biz | Site Recovery Manager Appliance | HK (Prod) |
-| 192.168.1.50  | hkesx-app00.core.biz | ESXi App Server I | HK (Prod) |
-| 192.168.1.55  | hklnx-app00.core.biz | Linux VM (FT Primary) | HK (Prod) |
-| 192.168.1.51  | hkesx-app01.core.biz | ESXi App Server II | HK (Prod) |
-| 192.168.1.58  | hkftx-app00.core.biz | Linux VM (FT Secondary) | HK (Prod) |
-| 192.168.1.70  | sgesx-dr01.core.biz  | ESXi System Server | SG (DR) |
-| 192.168.1.71  | sgvct-dr01.core.biz  | vCenter Server Appliance | SG (DR) |
-| 192.168.1.130 | sgvrp-app01.core.biz | vSphere Replication Appliance | SG (DR) |
-| 192.168.1.131 | sgsrm-app01.core.biz | Site Recovery Manager Appliance | SG (DR) |
-| 192.168.1.60  | sgesxdr-app01.core.biz | ESXi App Server | SG (DR) |
+| Role | Type | VMkernel | FQDN | IP Address | Subnet | DNS |
+|------|------|---------|------|-----------|--------|-----|
+| System Server | ESXi | Management | `hkesx-prd00.core.biz` | 192.168.1.250 | 255.255.255.0 | 192.168.1.100 |
+| vCenter Server | VM | Management | `hkvct-prd00.core.biz` | 192.168.1.251 | 255.255.255.0 | 192.168.1.100 |
+| vSphere Replication | VM | vMotion / vSAN / Replication | `hkvrp-app00.core.biz` | 192.168.1.120 | 255.255.255.0 | 192.168.1.100 |
+| Site Recovery Manager | VM | vMotion / vSAN / Replication | `hksrm-app00.core.biz` | 192.168.1.121 | 255.255.255.0 | 192.168.1.100 |
+| App Server I | ESXi | Management | `hkesx-app00.core.biz` | 192.168.1.50 | 255.255.255.0 | 192.168.1.100 |
+| Linux Appliance (FT Primary) | VM | Management | `hklnx-app00.core.biz` | 192.168.1.55 | 255.255.255.0 | 192.168.1.100 |
+| App Server II | ESXi | Management | `hkesx-app01.core.biz` | 192.168.1.51 | 255.255.255.0 | 192.168.1.100 |
+| Linux Appliance (FT Secondary) | VM | Management | `hkftx-app00.core.biz` | 192.168.1.58 | 255.255.255.0 | 192.168.1.100 |
 
+### SG Datacenter — DR Site (`192.168.1.x`)
+
+| Role | Type | VMkernel | FQDN | IP Address | Subnet | DNS |
+|------|------|---------|------|-----------|--------|-----|
+| System Server | ESXi | Management | `sgesx-dr01.core.biz` | 192.168.1.70 | 255.255.255.0 | 192.168.1.100 |
+| vCenter Server | VM | Management | `sgvct-dr01.core.biz` | 192.168.1.71 | 255.255.255.0 | 192.168.1.100 |
+| vSphere Replication | VM | vMotion / vSAN / Replication | `sgvrp-app01.core.biz` | 192.168.1.130 | 255.255.255.0 | 192.168.1.100 |
+| Site Recovery Manager | VM | vMotion / vSAN / Replication | `sgsrm-app01.core.biz` | 192.168.1.131 | 255.255.255.0 | 192.168.1.100 |
+
+### Domain Controller
+
+| Role | Type | FQDN | IP Address | Subnet | DNS |
+|------|------|------|-----------|--------|-----|
+| Domain Controller | Standalone VM | `hkwinprd00.core.biz` | 192.168.1.100 | 255.255.255.0 | 192.168.1.100 |
+
+> **Note:** The domain controller is intentionally installed as a standalone VM (not on the ESXi cluster) to prevent DNS failure during ESXi host failures. SRM's replication relies heavily on FQDN/DNS resolution for all inter-site communication.
+
+---
 ## VMkernel Port Group Requirements
 
 | VMkernel Role | Required On | Purpose |

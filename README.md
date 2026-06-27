@@ -43,56 +43,9 @@ This project implements a clustered virtual machine environment across two simul
 ---
 
 ## System Architecture
+<img width="3341" height="3251" alt="Untitled Diagram-Page-14" src="https://github.com/user-attachments/assets/503d4cd0-0b5a-43e7-8cbf-1f2c5dafba44" />
 
-```
-┌─────────────────────────────────────────────────────────────────────┐
-│                         vSphere Client                              │
-│                    (Administrator Interface)                        │
-└───────────────────────────┬─────────────────────────────────────────┘
-                            │
-              ┌─────────────┴──────────────┐
-              │                            │
-┌─────────────▼──────────────┐  ┌──────────▼─────────────────┐
-│   HK Datacenter            │  │   SG Datacenter             │
-│   PRODUCTION SITE          │  │   DISASTER RECOVERY SITE    │
-│   192.168.1.x              │  │   192.168.1.x               │
-│                            │  │                             │
-│ ┌──────────────────────┐   │  │ ┌─────────────────────────┐ │
-│ │ hkesx-prd00          │   │  │ │ sgesx-dr01              │ │
-│ │ ESXi System Server   │   │  │ │ ESXi System Server      │ │
-│ │ .250 | 16C | 64GB    │   │  │ │ .70  | 16C | 100GB      │ │
-│ │                      │   │  │ │                         │ │
-│ │ ├─ hkvct-prd00 VCSA  │   │  │ │ ├─ sgvct-dr01  VCSA    │ │
-│ │ ├─ hkvrp-app00 VR    │   │  │ │ ├─ sgvrp-app01 VR      │ │
-│ │ └─ hksrm-app00 SRM   │   │  │ │ └─ sgsrm-app01 SRM     │ │
-│ └──────────────────────┘   │  │ └─────────────────────────┘ │
-│                            │  │                             │
-│ ┌──────────────────────┐   │  │ ┌─────────────────────────┐ │
-│ │ hkesx-app00  .50     │   │◄─┼─┤ sgesxdr-app01 .60       │ │
-│ │ ESXi App Server I    │   │  │ │ ESXi App Server SG      │ │
-│ │ 16C | 32GB           │   │  │ └─────────────────────────┘ │
-│ │ └─ hklnx-app00 (FT)  │   │  │                             │
-│ └──────────────────────┘   │  └─────────────────────────────┘
-│                            │              ▲
-│ ┌──────────────────────┐   │              │
-│ │ hkesx-app01  .51     │   │  vSphere Replication (SRM)
-│ │ ESXi App Server II   │   │  RPO: 5 minutes minimum
-│ │ 16C | 32GB           │   │
-│ │ └─ hkftx-app00 (FT)  │   │
-│ └──────────────────────┘   │
-│                            │
-│ vSAN: 420 GB shared        │
-│ (across 3 ESXi hosts)      │
-└────────────────────────────┘
-              │
-┌─────────────▼──────────────┐
-│   Domain Controller        │
-│   hkwinprd00.core.biz      │
-│   Windows Server 2022      │
-│   192.168.1.100            │
-│   DNS + Active Directory   │
-└────────────────────────────┘
-```
+
 
 **Component roles:**
 

@@ -1,0 +1,34 @@
+# VMware vSphere DR Project .gitignore
+
+# VMware export files
+*.vmdk
+*.vmx
+*.vmxf
+*.vmsd
+*.nvram
+*.vmem
+*.vmsn
+
+# vCenter export artifacts
+*.ova
+*.ovf
+
+# Credential and config files with sensitive values
+*-credentials*
+*-passwords*
+*.env
+.env
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*~
+
+# Logs
+*.log

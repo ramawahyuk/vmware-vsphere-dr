@@ -16,7 +16,7 @@
 - [Network Configuration](https://github.com/ramawahyuk/vmware-vsphere-dr/blob/main/network-map.md)
 - [Hardware Configuration](https://github.com/ramawahyuk/vmware-vsphere-dr/blob/main/hardware-requirements.md)
 - [Hostname & FQDN Convention](#hostname--fqdn-convention)
-- [Fault Tolerance Design](#fault-tolerance-design)
+- [VM Fault Tolerance Design](#vm-sault-tolerance-design)
 - [Replication & Failback Scenarios](https://github.com/ramawahyuk/vmware-vsphere-dr/blob/main/fault-tolerance.md)
 - [Results](https://github.com/ramawahyuk/vmware-vsphere-dr/blob/main/results.md)
 - [Key Concepts](#key-concepts)

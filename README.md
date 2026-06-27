@@ -18,7 +18,7 @@
 - [Storage Configuration](#storage-configuration)
 - [Hostname & FQDN Convention](#hostname--fqdn-convention)
 - [Fault Tolerance Design](#fault-tolerance-design)
-- [Replication & Failback Scenarios](#replication--failback-scenarios)
+- [Replication & Failback Scenarios](https://github.com/ramawahyuk/vmware-vsphere-dr/blob/main/fault-tolerance.md)
 - [Results](https://github.com/ramawahyuk/vmware-vsphere-dr/blob/main/results.md)
 - [Key Concepts](#key-concepts)
 
@@ -255,7 +255,23 @@ All nodes follow a structured FQDN naming scheme: `XX-ZZ-VVV-NN.domain.TLD`
 - `core.biz` → domain
 
 ---
+## Key Concepts
 
+| Term | Definition |
+|------|-----------|
+| **RPO** (Recovery Point Objective) | Maximum acceptable data loss measured in time — how old can the recovered data be? |
+| **RTO** (Recovery Time Objective) | Maximum acceptable time to restore service after a disaster |
+| **Planned Migration** | Controlled failover where both sites are operational; zero data loss |
+| **Disaster Recovery** | Failover when the protected site is unavailable; minimal data loss |
+| **Reprotect** | After failover, reverses the replication direction so the new active site is protected |
+| **Protection Group** | A named SRM group of VMs that fail over together under the same recovery plan |
+| **vSAN** | VMware Virtual SAN — pools local ESXi host disks into shared storage |
+| **FT Logging** | Network stream carrying CPU instruction state between primary and secondary FT VMs |
+| **Hot Standby** | DR site is always running and continuously synchronized with production |
+| **Warm Standby** | DR site runs but synchronization is periodic, not continuous |
+| **Cold Standby** | DR site is powered off; longest activation time |
+
+---
 ## Fault Tolerance Design
 
 vSphere Fault Tolerance (FT) provides **zero-downtime protection** for individual VMs by maintaining a live secondary VM on a separate ESXi host that mirrors every CPU instruction of the primary in real time.
@@ -284,168 +300,6 @@ vSphere Fault Tolerance (FT) provides **zero-downtime protection** for individua
 | RTO | Zero (automatic) | Minutes (orchestrated) |
 | Failback | Automatic | Manual (planned migration) |
 | Use case | Critical VMs on same cluster | Cross-datacenter DR |
-
----
-
-## Replication & Failback Scenarios
-
-The full DR lifecycle is managed through SRM and consists of six sequential operations:
-
-```
-┌─────────┐    ┌─────────┐    ┌────────────┐    ┌─────────────┐    ┌────────────┐    ┌─────────────┐
-│  Test   │───►│ Cleanup │───►│ Recovery I │───►│ Reprotect I │───►│Recovery II │───►│Reprotect II │
-│         │    │         │    │ HK → SG    │    │ SG becomes  │    │ SG → HK    │    │ HK becomes  │
-│(non-    │    │         │    │(planned    │    │ protected   │    │(planned    │    │ protected   │
-│disrupt.)│    │         │    │ migration) │    │ site        │    │ migration) │    │ site again  │
-└─────────┘    └─────────┘    └────────────┘    └─────────────┘    └────────────┘    └─────────────┘
-```
-
-### Phase 1: Test Recovery Plan (Non-Destructive)
-
-Validates the DR plan without disrupting production. Creates a writable snapshot of replicated storage and powers on VMs in an isolated test network.
-
-```
-Plan:      Failover-Test
-Operation: Test Recovery Plan
-Protected: PROD-00 (HK)
-Recovery:  DRS-01  (SG)
-```
-
-Steps:
-1. Synchronize storage between sites
-2. Restore recovery site hosts from standby
-3. Suspend non-critical VMs at recovery site
-4. Create writable storage snapshot for Protection Group VR
-5. Configure test networks for `hklnx-app00.core.biz`
-6. Power on priority 3 VMs at recovery site
-7. Wait for VMware Tools to report ready
-
-### Phase 2: Cleanup
-
-Rolls back all test state — powers off test VMs, discards snapshot, resets storage, resumes suspended VMs.
-
-### Phase 3: Recovery I — Planned Migration (HK → SG)
-
-Migrates the protected VM from HK production site to SG DR site in a controlled manner. Both sites must be operational.
-
-```
-Algorithm:
-  if ProtectionGroupVR available:
-    preSynchronizeStorage()
-    shutDownVM("hklnx-app00.core.biz")   // at protected site
-    restoreRecoverySiteHostsFromStandby()
-    prepareProtectedSiteVMsForMigration("hklnx-app00.core.biz")
-    changeStorageToReadOnly("datastore2")
-    synchronizeStorage()
-    changeRecoverySiteStorageToWritable("hklnx-app00.core.biz")
-    configureStorage("datastore2")
-    powerOnPriorityVMs("hklnx-app00.core.biz")
-```
-
-### Phase 4: Reprotect I — Reverse Replication Direction
-
-After Recovery I, SG becomes the new protected site and HK becomes the recovery site. Replication direction reverses (SG → HK).
-
-```
-Algorithm:
-  RestoreProtectedSiteHostsFromStandby()
-  ConfigureStorageToReverseDirection()
-  ConfigureVRReplication("hklnx-app00.core.biz")
-  ConfigureProtectionToReverseDirection()
-  ConfigureVMsProtection("hklnx-app00.core.biz")
-  CleanUpStorage()
-  SynchronizeStorage()
-```
-
-### Phase 5: Recovery II — Planned Migration (SG → HK)
-
-Migrates the VM back to HK. Protected site is now DRS-01 (SG), recovery site is PROD-00 (HK).
-
-```
-Algorithm:
-  preSynchronizeStorage()
-  restoreRecoverySiteHostFromStandby()
-  restoreProtectedSiteHostFromStandby()
-  if ProtectionGroupVR exists:
-    prepareVM("hklnx-app00.core.biz")
-    changeStorageToReadOnly()
-    synchronizeStorage()
-    changeRecoverySiteStorageToWritable("hklnx-app00.core.biz")
-    configureStorage()
-  powerOnVMs("hklnx-app00.core.biz")
-```
-
-### Phase 6: Reprotect II — Restore Original Configuration
-
-Returns the system to the original state: HK is protected, SG is recovery, replication direction is HK → SG.
-
-```
-Algorithm:
-  restoreProtectedSiteHostsFromStandby()
-  configureStorageToReverseDirection()
-  if ProtectionGroupVR exists:
-    configureVRReplicationForVM("hklnx-app00.core.biz")
-    configureProtectionForVM("hklnx-app00.core.biz")
-    cleanUpStorageForProtectionGroup()
-    synchronizeStorageForProtectionGroup()
-```
-
----
-
-## Results
-
-### Recovery Test Run 1
-
-| Operation | Result | Duration |
-|-----------|--------|---------|
-| Test | ✅ Success | 1 m 13 s |
-| Cleanup | ✅ Success | 2 s |
-| Recovery I (HK → SG) | ✅ Success | 1 m 26 s |
-| Reprotect I | ✅ Success | 30 s |
-| Recovery II (SG → HK) | ✅ Success | 1 m 28 s |
-| Reprotect II | ✅ Success | 27 s |
-| **Total** | | **5 m 15 s** |
-
-### Recovery Test Run 2
-
-| Operation | Result | Duration |
-|-----------|--------|---------|
-| Test | ✅ Success | 1 m 6 s |
-| Cleanup | ✅ Success | 6 s |
-| Recovery I (HK → SG) | ✅ Success | 1 m 23 s |
-| Reprotect I | ✅ Success | 6 s |
-| Recovery II (SG → HK) | ✅ Success | 43 s |
-| Reprotect II | ✅ Success | 24 s |
-| **Total** | | **3 m 8 s** |
-
-**vSphere Replication active period:** June 12, 2023 – June 19, 2023
-
-### Key Findings
-
-- Full 6-step DR cycle (migration + failback) completed in **under 4 minutes 15 seconds** for two Linux VMs
-- SRM dramatically simplifies the DR process — administrators define the plan once; execution is automated
-- SRM with planned migration achieves **zero data loss** (pre-synchronization before shutdown)
-- Fault Tolerance provides **zero-downtime** protection against individual host failures within the same cluster
-- RPO as low as **5 minutes** is achievable with vSphere Replication
-- DNS/FQDN resolution is a hard dependency — domain controller must remain available throughout DR operations
-
----
-
-## Key Concepts
-
-| Term | Definition |
-|------|-----------|
-| **RPO** (Recovery Point Objective) | Maximum acceptable data loss measured in time — how old can the recovered data be? |
-| **RTO** (Recovery Time Objective) | Maximum acceptable time to restore service after a disaster |
-| **Planned Migration** | Controlled failover where both sites are operational; zero data loss |
-| **Disaster Recovery** | Failover when the protected site is unavailable; minimal data loss |
-| **Reprotect** | After failover, reverses the replication direction so the new active site is protected |
-| **Protection Group** | A named SRM group of VMs that fail over together under the same recovery plan |
-| **vSAN** | VMware Virtual SAN — pools local ESXi host disks into shared storage |
-| **FT Logging** | Network stream carrying CPU instruction state between primary and secondary FT VMs |
-| **Hot Standby** | DR site is always running and continuously synchronized with production |
-| **Warm Standby** | DR site runs but synchronization is periodic, not continuous |
-| **Cold Standby** | DR site is powered off; longest activation time |
 
 ---
 

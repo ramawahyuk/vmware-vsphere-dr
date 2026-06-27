@@ -121,7 +121,7 @@ Hosts: vCenter Server VCSA, vSphere Replication appliance, SRM appliance
 
 ### HK Datacenter — Production Site
 
-<img width="2261" height="1440" alt="Untitled Diagram-HK (1)" src="https://github.com/user-attachments/assets/75c8bcab-6ebd-4caa-a05b-93a0125d8874" />
+<img width="2261" height="1440" alt="Untitled Diagram-HK" src="https://github.com/user-attachments/assets/32f473d1-7185-4a45-980a-097d3d866e3a" />
 
 | Host | Datastore | Size (GB) | Asset |
 |------|-----------|----------|-------|
@@ -130,12 +130,13 @@ Hosts: vCenter Server VCSA, vSphere Replication appliance, SRM appliance
 | | datastore3 | 150 | vSphere Replication OS |
 | | datastore4 | 100 | SRM OS |
 | | datastore5 | 200 | Replication |
-| | datastore6 | 200 | DR/vSAN |
+| | datastore6 | 140 | DR/vSAN |
 | `hkesx-app00` (192.168.1.50) | datastore1 | 100 | ESXi OS |
 | | datastore2 | 100 | App OS |
 | | datastore3 | 140 | DR/vSAN |
 | `hkesx-app01` (192.168.1.51) | datastore1 | 100 | ESXi OS |
 | | datastore2 | 100 | App OS |
+| | datastore3 | 140 | DR/vSAN |
 
 
 ### SG Datacenter — DR Site
@@ -161,11 +162,11 @@ Hosts: vCenter Server VCSA, vSphere Replication appliance, SRM appliance
 
 ### vSAN Shared Storage
 
-Three ESXi hosts contribute dedicated disk capacity to a single vSAN datastore, accessible by all three hosts as shared storage — enabling Fault Tolerance for VMs.
+Three ESXi hosts on HK DC contribute dedicated disk capacity to a single vSAN datastore, accessible by all three hosts as shared storage — enabling Fault Tolerance for VMs.
 
 | Host | Datastore | Size (GB) | Network |
 |------|-----------|----------|---------|
-| `hkvct-prd00` (192.168.1.251) | datastore7 | 140 | vSAN dedicated NIC / VMkernel vSAN traffic |
+| `hkesx-prd00` (192.168.1.251) | datastore6 | 140 | vSAN dedicated NIC / VMkernel vSAN traffic |
 | `hkesx-app00` (192.168.1.50) | datastore3 | 140 | vSAN dedicated NIC / VMkernel vSAN traffic |
 | `hkesx-app01` (192.168.1.51) | datastore3 | 140 | vSAN dedicated NIC / VMkernel vSAN traffic |
 | **Total vSAN capacity** | | **420 GB** | |

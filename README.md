@@ -21,7 +21,7 @@
 - [Replication & Failback Scenarios](#replication--failback-scenarios)
 - [Results](#results)
 - [Key Concepts](#key-concepts)
-- [Key Concepts](#network-map.md)
+- [Key Concepts](https://github.com/ramawahyuk/vmware-vsphere-dr/blob/main/network-map.md)
 
 ---
 

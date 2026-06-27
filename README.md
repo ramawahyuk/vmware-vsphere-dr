@@ -14,14 +14,13 @@
 - [Overview](#overview)
 - [System Architecture](#system-architecture)
 - [Hardware Requirements](#hardware-requirements)
-- [Network Configuration](#network-configuration)
+- [Network Configuration](https://github.com/ramawahyuk/vmware-vsphere-dr/blob/main/network-map.md)
 - [Storage Configuration](#storage-configuration)
 - [Hostname & FQDN Convention](#hostname--fqdn-convention)
 - [Fault Tolerance Design](#fault-tolerance-design)
 - [Replication & Failback Scenarios](#replication--failback-scenarios)
 - [Results](#results)
 - [Key Concepts](#key-concepts)
-- [Key Concepts](https://github.com/ramawahyuk/vmware-vsphere-dr/blob/main/network-map.md)
 
 ---
 

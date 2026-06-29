@@ -96,19 +96,13 @@ All nodes follow a structured FQDN naming scheme: `XX-ZZ-VVV-NN.domain.TLD`
 | **Cold Standby** | DR site is powered off; longest activation time |
 
 ---
-## VM Fault Tolerance Design
+## VM Fault Tolerance 
 
 vSphere Fault Tolerance (FT) provides **zero-downtime protection** for individual VMs by maintaining a live secondary VM on a separate ESXi host that mirrors every CPU instruction of the primary in real time.
 
-```
-  ESXi Host Primary (hkesx-app00)      ESXi Host Secondary (hkesx-app01)
-  ┌───────────────────────────┐         ┌──────────────────────────────┐
-  │  Primary VM               │         │  Secondary VM                │
-  │  hklnx-app00.core.biz    │◄────────►│  (shadow — always in sync)  │
-  │  (active, serving traffic)│  FT Log │  (takes over instantly       │
-  └───────────────────────────┘  Stream │   if primary host fails)     │
-                                        └──────────────────────────────┘
-```
+<img width="1662" height="946" alt="VM FT" src="https://github.com/user-attachments/assets/eb0e745f-fbce-424e-8012-1b301a8bab6c" />
+
+
 
 **Requirements:**
 - Both hosts must be connected to the vSAN datastore (shared storage is mandatory for FT)

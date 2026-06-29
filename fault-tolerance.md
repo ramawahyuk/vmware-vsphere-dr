@@ -2,14 +2,8 @@
 
 The full DR lifecycle is managed through SRM and consists of six sequential operations:
 
-```
-┌─────────┐    ┌─────────┐    ┌────────────┐    ┌─────────────┐    ┌────────────┐    ┌─────────────┐
-│  Test   │───►│ Cleanup │───►│ Recovery I │───►│ Reprotect I │───►│Recovery II │───►│Reprotect II │
-│         │    │         │    │ HK → SG    │    │ SG becomes  │    │ SG → HK    │    │ HK becomes  │
-│(non-    │    │         │    │(planned    │    │ protected   │    │(planned    │    │ protected   │
-│disrupt.)│    │         │    │ migration) │    │ site        │    │ migration) │    │ site again  │
-└─────────┘    └─────────┘    └────────────┘    └─────────────┘    └────────────┘    └─────────────┘
-```
+<img width="1956" height="804" alt="SRM" src="https://github.com/user-attachments/assets/8af8ba8d-7e60-462f-a405-208982f21bfa" />
+
 ---
 ### Phase 1: Test Recovery Plan (Non-Destructive)
 
